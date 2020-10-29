@@ -14,6 +14,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Interfaces\SearchResultInterface;
 use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
+use WebDevEtc\BlogEtc\Services\UploadsService;
 
 /**
  * Class BlogEtcPost.
@@ -42,6 +43,7 @@ class Post extends Model implements SearchResultInterface
         'title',
         'subtitle',
         'short_description',
+        'author_name',
         'post_body',
         'seo_title',
         'meta_desc',
@@ -194,7 +196,7 @@ class Post extends Model implements SearchResultInterface
 
         $imageUrl = e($this->imageUrl($size));
         $imageAltText = e($this->title);
-        $imgTag = '<img src="'.$imageUrl.'" alt="'.$imageAltText.'" class="'.e($imgTagClass).'">';
+        $imgTag = '<img src="' . $imageUrl.'" alt="'.$imageAltText.'" class="'.e($imgTagClass).'">';
 
         return $addAHref
             ? '<a class="'.e($anchorTagClass).'" href="'.e($this->url()).'">'.$imgTag.'</a>'
@@ -240,8 +242,8 @@ class Post extends Model implements SearchResultInterface
         $this->checkValidImageSize($size);
         $filename = $this->{'image_'.$size};
 
-        return asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$filename);
-//        return UploadsService::publicUrl($filename);
+//        return asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$filename);
+        return UploadsService::publicUrl($filename);
     }
 
     /**
@@ -275,6 +277,10 @@ class Post extends Model implements SearchResultInterface
 //        }
         if ($this->author) {
             return (string) optional($this->author)->name;
+        }
+
+        if ($this->author_name) {
+            return (string) $this->author_name;
         }
 
         return 'Unknown Author';

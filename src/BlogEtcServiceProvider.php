@@ -35,6 +35,7 @@ class BlogEtcServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/Views/blogetc'             => base_path('resources/views/vendor/blogetc'),
+            __DIR__.'/Views/blogetc_admin'             => base_path('resources/views/vendor/blogetc_admin'),
             __DIR__.'/Config/blogetc.php'        => config_path('blogetc.php'),
             __DIR__.'/css/blogetc_admin_css.css' => public_path('blogetc_admin_css.css'),
         ]);
@@ -65,9 +66,8 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->loadViewsFrom(__DIR__.'/Views/blogetc_admin', 'blogetc_admin');
-
         // if you do the vendor:publish, these will be copied to /resources/views/vendor/blogetc anyway
         $this->loadViewsFrom(__DIR__.'/Views/blogetc', 'blogetc');
+        $this->loadViewsFrom(__DIR__.'/Views/blogetc_admin', 'blogetc_admin');
     }
 }

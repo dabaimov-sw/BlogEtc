@@ -9,12 +9,10 @@ class UserCanManageBlogPosts
 {
     public function handle($request, Closure $next)
     {
-        abort_if(
-            !Helpers::hasAdminGateAccess(),
-            401,
-            'User not authorised to manage blog posts'
-        );
 
+        if(!Helpers::hasAdminGateAccess()) {
+            return redirect()->guest('login');
+        }
         return $next($request);
     }
 }
